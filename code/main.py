@@ -33,11 +33,16 @@ def rmt(df):
     C_STR = eigvecs[:, idx_str] @ np.diag(eigvals[idx_str]) @ eigvecs[:, idx_str].T
 
     # --- Random ---
-    idx_rnd = (eigvals >= lam_minus) & (eigvals <= lam_plus)
+    idx_rnd = eigvals <= lam_plus
     C_RND = eigvecs[:, idx_rnd] @ np.diag(eigvals[idx_rnd]) @ eigvecs[:, idx_rnd].T
     
     C_STR = (C_STR + C_STR.T)/2
     C_RND = (C_RND + C_RND.T)/2
+    
+        # --- Zero diagonal ---
+    np.fill_diagonal(C_FULL, 0)
+    np.fill_diagonal(C_STR, 0)
+    np.fill_diagonal(C_RND, 0)
 
 
     return C_FULL, C_STR, C_RND
